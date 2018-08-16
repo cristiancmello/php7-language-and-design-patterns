@@ -400,7 +400,7 @@ foreach ($colors as $key => $color) {
     $colors[$key] = strtolower($color);
 }
 
-print_r($colors)."\n";
+print_r($colors);
 
 // Outro exemplo de uso de referência
 $arr1 = [1, 2];
@@ -424,3 +424,83 @@ print_r($files); // Array ( [0] => .. [1] => 1-types.php [2] => . )
 
 sort($files);
 print_r($files); // Array ( [0] => . [1] => .. [2] => 1-types.php )
+
+// Iterables
+// É um pseudo-tipo introduzido em PHP 7.1. Aceita qualquer array ou objeto
+// que implemente a interface Traversable
+// Ambos os tipos são iteráveis usando `foreach`
+
+// Parâmetro Iterable
+// Declaração também é permitida: function foo(iterable $iterable = [ [] | NULL ]) {}
+function foo(iterable $iterable) {
+    foreach ($iterable as $value) {
+        print($value)."\n";
+    }
+}
+
+$fruits = ['apple', 'strawberry', 'pineapple'];
+foo($fruits); // apple\nstrawberry\npineapple
+
+// Iterable pode especificar um retorno na função
+function bar(): iterable {
+    return [1, 2, 3];
+}
+
+print_r(bar()); // Array ( [0] => 1 [1] => 2 [2] => 3)
+
+// Iterable generator com retorno especificado
+function gen(): iterable {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+
+print_r(gen()); // Generator Object ( )
+
+// Variação no tipo Iterable
+// Classes herdando/implementando podem ampliar os métodos usando array ou Traversable
+// como tipos de parâmetro para iterar.
+
+interface Example {
+    public function method(array $array): iterable; // retorno como Traversable
+}
+
+class ExampleImpl implements Example {
+    public function method(iterable $iterable): array /* Retorno como array */{
+        // ...
+    }
+}
+
+// Objects
+// Capítulo inteiro dedicado a OOP: https://secure.php.net/manual/en/language.oop5.php
+
+// Inicialização de objetos
+// Para criar novo objeto, é usado o token `new` para instanciar uma classe.
+class foo {
+    function do_foo() {
+        echo "Doing foo.";
+    }
+}
+
+$bar = new foo; // ou foo()
+$bar->do_foo()."\n";
+
+// Convertendo para objeto
+$obj = (object) ['1' => 'foo'];
+var_dump($obj);
+
+/*
+class stdClass#2 (1) {
+  public $1 => string(3) "foo"
+}
+*/
+
+// Verificar se o campo '1' foi definido
+// Abaixo há uma estrutura sintática para referenciar campos que possuem nomes como string
+// para esse caso específico de casting
+var_dump(isset($obj->{'1'})); // bool(true)
+var_dump(key($obj)); // string(1) "1"
+
+// Para qualquer outro valor, um membro chamado `scalar` conterá o valor
+$obj = (object)'tchau';
+print($obj->scalar)."\n"; // tchau
