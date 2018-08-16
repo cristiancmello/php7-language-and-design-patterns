@@ -504,3 +504,48 @@ var_dump(key($obj)); // string(1) "1"
 // Para qualquer outro valor, um membro chamado `scalar` conterá o valor
 $obj = (object)'tchau';
 print($obj->scalar)."\n"; // tchau
+
+// Resources
+// É um tipo especial de variável. Ela mantém uma referência a um recurso externo.
+// Resources são criados e usados por funções especiais.
+
+// Resources lidam com manipuladores especiais para arquivos aberto (streams),
+// conexões com DB, canvas de imagens e etc
+
+// Alguns tipos de recursos e bibliotecas: aspell, bzip2, gd, gmp, mysql-query, fopen, ...
+// Lista em https://secure.php.net/manual/en/resource.php
+
+// `is_resource()`: identifica se a variável é um recurso
+$conn = fopen('1-types.php', 'r');
+echo is_resource($conn)."\n"; // `1`
+
+// `get_resource_type()`: obter o tipo de resource
+echo get_resource_type($conn)."\n"; // `stream`
+
+// Liberando Resources
+// DESDE PHP 4 (Zend Engine) => RECURSO É LIBERADO AUTOMATICAMENTE QUANDO A REFERÊNCIA NÃO É MAIS USADA
+// EXCEÇÃO: CONEXÕES PERSISTENTES DE BANCOS DE DADOS NÃO SÃO DESTRUÍDAS PELO GARBAGE COLLECTOR
+
+// NULL
+// Representa uma variável sem valor
+// É O ÚNICO VALOR POSSÍVEL DO TIPO NULL.
+
+// Casos em que uma varável é considerada NULL:
+// (1) $var = NULL;
+// (2) Ainda não recebeu nenhum valor;
+// (3) foi apagada com unset()
+
+$var = null; # ou NULL
+echo $var."\n"; // ``
+
+// `is_null()`: verifica se o valor de uma variável é null
+echo is_null($var)."\n"; // `1`
+
+// `unset()`: destrói a variável especificada
+
+// Casting para NULL
+// Converter variável para null usando `(unset) $var` não a removerá ou apagará
+// seu valor. Apenas retornará NULL como valor.
+$var = 'foo';
+var_dump((unset)$var); // NULL
+var_dump($var); // string(3) "foo"
