@@ -148,7 +148,7 @@ echo $str.PHP_EOL; // PHP End Of Line
 
 // Desde PHP 7.1, "" <=> []
 $str = "foo";
-echo $str[1]."\n";
+echo $str[1]."\n"; // `o`
 
 // Nota: Acessar ou modificar uma string usando brackets não são multi-byte safe.
 // Isso só deve ser feito com string single-byte com a ISO 8859-1
@@ -164,3 +164,263 @@ echo "$a\n"; // `helloworld!`
  Encrypt/Decrypt String: https://secure.php.net/manual/en/ref.sodium.php e
     https://secure.php.net/manual/en/ref.hash.php
  */
+
+// Arrays
+// Em PHP, array é um mapa que relaciona valores e chaves (hash map)
+// É otimizado para vários usos: array, lista (vetor), hashtable (impl. de map),
+// dicionário, coleção, pilha, fila e etc.
+// Destaca-se que array pode ser formado por arrays, árvores ou matrizes
+
+// sintaxe
+$array = array(
+    'foo' => 'bar',
+    'bar' => 'foo'
+);
+
+// ou (na forma contraída)
+$array = [
+    'foo' => 'bar',
+    'bar' => 'foo'
+];
+
+// Chave: pode ser integer ou string
+/*
+ * Chave sendo String: '8' é convertido para inteiro 8; '08' => não será convertido;
+ * Chave sendo Float: a parte fracionário é removida; '2.17' convertido para inteiro 2;
+ * Chave sendo NULL: é convertido para "";
+ * Chave sendo array | object: não podem ser usados como chave. Isso provoca em warn 'Illegal offset type';
+*/
+// Override de valores com mesmas chaves
+$array = [
+    1 => 'a',
+    "1" => 'b',
+    1.7 => 'c',
+    true => 'd'
+];
+
+var_dump($array); // `array(1) { [1] => string(1) "d" }` -> logo, apenas o último valor foi considerado
+
+// PHP NÃO FAZ DISTINÇÃO ENTRE ARRAYS INDEXADOS (USANDO INTEGER) E ASSOCIATIVOS (USAM STRING)
+$array = [
+    'foo' => 'bar',
+    'bar' => 'foo',
+    2 => -90,
+    -5 => 17
+];
+
+var_dump($array);
+
+/*
+Saída será:
+
+array(4) {
+  'foo' => string(3) "bar"
+  'bar' => string(3) "foo"
+  [2] => int(-90)
+  [-5] => int(17)
+}
+*/
+
+// Arrays indexados sem chaves: são incrementados a partir de 0 ou posição numérica
+// explicitada
+$array = ['foo', 'bar', 'hello', 'world'];
+var_dump($array);
+
+/*
+array(4) {
+  [0] => string(3) "foo"
+  [1] => string(3) "bar"
+  [2] => string(5) "hello"
+  [3] => string(5) "world"
+}
+*/
+
+$array = [
+    'foo' => 'bar',
+    1 => 'foo',
+    -1 => 'hello',
+    'world'
+];
+
+var_dump($array);
+
+/*
+array(3) {
+  'foo' => string(3) "bar"
+  [1] => string(3) "foo"
+  [-1] => string(5) "hello"
+  [2] => string(5) "world" ==> O incremento de chave conta com o maior índice de elemento declarado
+}
+*/
+
+// Acessando elementos do array
+$array = [
+    'foo' => 'bar',
+    'multi' => [
+        'dim' => [
+            'array' => 'foo'
+        ]
+    ]
+];
+
+var_dump($array['foo']);    // string(3) "bar"
+var_dump($array['multi']['dim']['array']); // string(3) "foo"
+
+// Referenciando elemento de um array
+function getArray() {
+    return [1, 2, 3];
+}
+
+echo getArray()[1]."\n"; // `2`
+$array = getArray();
+echo $array{1}."\n"; // `2` (forma equivalente de obter valor a partir de chave)
+
+// Alternativa usando list
+list(, $secondElement) = getArray();
+echo $secondElement."\n";
+
+// Mensagem de erro: E_NOTICE com resultado NULL
+// echo $array[10]."\n"; -> Undefined offset
+
+// Criando/modificando com a sintaxe de colchetes
+$array = [2 => 10, 10 => 30];
+$array[] = 56; echo $array[11]."\n"; // `56` -> chave 11 é criada e valorada (NÃO RECOMENDADO)
+$array['x'] = 42; echo $array['x']."\n"; // `42` -> elemento é criado dinamicamente
+
+// Remover elemento do array
+unset($array['x']);
+print_r($array);
+
+/*
+Array (
+    [2] => 10
+    [10] => 30
+    [11] => 56
+)
+*/
+
+// Remover todo o array
+unset($array); // variável `$array` fica indefinida
+
+// IMPORTANTE: mesmo apagando o conteúdo do array, as chaves continuam em memória
+$array = [1, 2, 3, 4, 5];
+foreach ($array as $key => $value) {
+    unset($array[$key]);
+}
+
+print_r($array); // Array (  )
+
+$array[] = 10; print_r($array); // Array ( [5] => 10 ) -> a última chave indexada foi incrementada
+
+// Reindexando (iniciar nova contagem de chaves)
+$array = array_values($array);
+$array[] = 7; print_r($array); // Array ( [0] => 10 [1] => 7 )
+
+// Array: faça e não faça
+
+// Mostrando todos os erros
+error_reporting(E_ALL); // irá omitir avisos de códigos com más práticas
+
+// A atribuição abaixo
+$foo[bar] = 'hello'; // vai provocar warning, pois PHP trata `bar` como constante indedinida
+print_r($foo); // futuramente PHP tratará isso como exceção
+
+// Não delimite chaves que sejam constantes ou variáveis, porque isso impedirá
+// o PHP de intepretá-las.
+$array = ['fruta' => 'maçã', 'legume' => 'cenoura'];
+print($array['fruta'])."\n"; // `maçã`
+print($array[fruta])."\n"; // `maçã`
+
+define('fruta', 'legume'); // definição de constante chamada `fruta` como sendo `legume`
+print($array[fruta])."\n"; // `cenoura` -> ocorre que `fruta` corresponderá a chave `legume`
+
+// Constantes comuns aceitas (MUITO RUIM, pois novas constantes podem ser reservadas na especificação da linguagem)
+$error_descriptions[E_ERROR] = 'Erro fatal ocorreu';
+$error_descriptions[E_WARNING] = 'O PHP emitiu um alarme';
+$error_descriptions[E_NOTICE] = 'Apenas um aviso informal';
+
+print_r($error_descriptions); // Array ( [1] => Erro fatal ocorreu [2] => O PHP emitiu um alarme [8] => ... )
+
+// Casting para array
+/*
+ * integer, float, string, boolean e resource => será dado (array) $scalarValue <=> array($scalarValue)
+ */
+print_r((array)56)."\n"; // Array ( [0] => 56 )
+print_r((array)[])."\n"; // Array ( )
+print_r((array)NULL)."\n"; // Array ( )
+
+class A {
+    private $A;
+}
+
+class B extends A {
+    private $A; // será '\0B\0A'
+    public $AA; // será 'AA'
+    protected $B; // será '\0*\0B'
+}
+
+var_dump((array) new A()); // array(1) { '\0A\0A' => NULL }
+var_dump((array) new B()); // array(3) { '\0B\0A' => NULL 'AA' => NULL => '\0A\0A' => NULL }
+
+// Comparando Arrays
+// `array_diff( array $arr1, array $arr2 [, array $...] )`
+// $arr1: array a ser comparado
+// $arrN: um array para comparar
+// Retorno: retorna um array com todos os elementos de $arr1 que não estão
+// presentes em nenhum dos outros arrays.
+$arr1 = ['a' => 'red', 'b' => 'green', 'c' => 'blue'];
+$arr2 = ['d' => 'yellow', 'b' => 'green'];
+print_r(array_diff($arr1, $arr2)); // Array ( [a] => red [c] => blue )
+
+// Coleção
+$colors = ['red', 'green', 'blue'];
+
+foreach ($colors as $color) {
+    print("Você gosta de $color?\n");
+}
+
+// Alterar valores diretamente usando passagem por referência
+// Caso abaixo é um exemplo inalteração de valores sem uso de referência
+foreach ($colors as $color) {
+    $color = strtoupper($color);
+}
+
+print_r($colors)."\n"; // Valores foram preservados
+
+// Usando referência
+foreach ($colors as &$color) {
+    $color = strtoupper($color);
+}
+
+$color = 'YELLOW'; // IMPORTANTE: se não utilizar unset, $color continuará referenciado
+unset($color);
+
+// Sem uso direto de referência, a forma abaixo funciona em versões antigas
+foreach ($colors as $key => $color) {
+    $colors[$key] = strtolower($color);
+}
+
+print_r($colors)."\n";
+
+// Outro exemplo de uso de referência
+$arr1 = [1, 2];
+$arr2 = &$arr1;
+$arr2[] = 3;
+print_r($arr1); // Array ( [0] => 1 [1] => 2 [2] => 3 )
+
+
+// Preenchendo um array
+$handle = opendir('.');
+
+while (false !== ($file = readdir($handle))) {
+    $files[] = $file;
+}
+
+closedir($handle);
+print_r($files); // Array ( [0] => .. [1] => 1-types.php [2] => . )
+
+// ARRAYS SÃO SEMPRE ORDENADOS. É possível mudar a ordenação usando
+// funções de ordenação (como `sort()`)
+
+sort($files);
+print_r($files); // Array ( [0] => . [1] => .. [2] => 1-types.php )
