@@ -75,3 +75,21 @@ if ($a > $b):
 elseif ($a == $b):
     echo "a é igual a b" . "\n";
 endif;
+
+// Sintaxe alternativa para estruturas de controle
+// if, while, for, foreach e switch suportam uso de `:`
+
+?>
+
+<?php if (true): ?>
+Sempre true. <!-- output HTML -->
+<?php endif; ?>
+
+<!-- MISTURA DE SINTAXES COM `:` e `{}` NÃO É SUPORTADA NO MESMO BLOCO DE CONTROLE -->
+
+<!-- IMPORTANTE: QUALQUER SAÍDA (INCLUSIVE ESPAÇOS EM BRANCO) ENTRE `switch`
+E O PRIMEIRO CASE IRÁ RESULTAR NUM ERRO DE SINTAXE. -->
+<?php $foo = 1 ?>
+<?php switch($foo): ?>
+<?php case 1: ?> <!-- espaços à esquerda não são permitidos -->
+<?php endswitch ?>
