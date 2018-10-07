@@ -16,7 +16,7 @@ diretive ::= [ticks | encoding | strict]
 declare(ticks=1);
 
 // Inválido
-// declare(ticks=TICK_VALUE); -> DEVE SER LITERAL
+// declare(ticks=TICK_VALUE); -> TICK_VALUE é constante e isso é inválido
 
 // Declaração com escopo global
 declare(ticks=1);

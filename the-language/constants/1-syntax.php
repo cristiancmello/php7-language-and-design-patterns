@@ -42,7 +42,7 @@ echo ANIMALS[2] . "\n"; // bird
 // Magic constants
 // O PHP fornece um grande número de constantes predefinidas para qualquer script
 // que execute. A maioria dessas constantes, entretanto, são criadas por várias
-// extensões, ẽ estarão presentes somente quando essas extensões estiverem disponíveis,
+// extensões, e estarão presentes somente quando essas extensões estiverem disponíveis,
 // tanto por carregamento dinâmico quanto por compilação direta.
 
 // Algumas constantes mágicas notáveis

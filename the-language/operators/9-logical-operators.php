@@ -7,7 +7,7 @@ $a = true;
 $b = false;
 
 // AND
-echo (($a && $b) == false). "\n"; // 1 (isto é, false)
+echo (($a && $b) == false). "\n"; // 1 (isto é, true)
 
 // OR
 echo (($a || $b) == true). "\n"; // 1
@@ -27,7 +27,7 @@ echo (($a xor $b) == true). "\n"; // 1
 
 // CURTO CIRCUITO
 // Há casos onde funções não são chamadas em expressões lógicas
-$a = (false && foo()); // foo() nunca será chamada devido a expressão]
+$a = (false && foo()); // foo() nunca será chamada devido a expressão
 $a = (true || foo()); // foo() também não será chamada
 
 // Um atribuição sintética

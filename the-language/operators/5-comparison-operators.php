@@ -17,7 +17,7 @@ $a != $b;
 // Forma 2
 $a <> $b;
 
-// 4. Não idêntico
+// 4. Não idêntico (diferente em valor OU em tipo)
 $a !== $b; // $a != b || gettype($a) != gettype($b)
 
 // 5. Menor que

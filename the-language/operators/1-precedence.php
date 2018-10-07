@@ -57,6 +57,6 @@ function foo() {
     return true;
 }
 
-if (!$a = foo()); // $a <- valor de foo() primeiramente
+if (!$a = foo()); // $a recebe o valor de foo() primeiramente e depois aplica a negação
 
 echo $a . "\n"; // 1 (ou true)

@@ -50,14 +50,12 @@ echo (($a !== $b) == true) . "\n";
 $a = [1, 2, 3];
 $b = [2, 3, 4];
 
-$a += $b; // é o meso que $a = $a + $b
+$a += $b; // é o mesmo que $a = $a + $b
 print_r($a);
 
 $a = ['a' => 'banana', 'b' => 'maçã'];
 $b = ['a' => 'banana', 'b' => 'pera', 'c' => 'laranja'];
 
-// Se array $a e $b tiverem as mesmas chaves, os valores para essas chaves em
-// de $b são ignorados e de $a são mantidos
 $a += $b;
 
 print_r($a);

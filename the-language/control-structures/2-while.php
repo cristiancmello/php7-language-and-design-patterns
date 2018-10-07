@@ -1,7 +1,7 @@
 <?php
 
 // While
-// Laços `while` tem mesma sintaxe e semântica que em C
+// Laços `while` têm mesma sintaxe e semântica que em C
 
 // Exemplo 1
 $i = 0;

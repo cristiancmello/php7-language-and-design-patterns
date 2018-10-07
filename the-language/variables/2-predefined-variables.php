@@ -5,7 +5,7 @@
 // No entanto, muitas vão estar disponíveis dependendo do ambiente e contexto.
 // No PHP-CLI, muitas variáveis de ambiente não estão disponíveis.
 
-// AVISO: PHP > v4.2.0 => a diretira `register_globals` é `off` por padrão.
+// AVISO: PHP > v4.2.0 => a diretiva `register_globals` é `off` por padrão.
 //        Logo, $_ENV['HOME'] é aceito e $HOME não é mais aceito, como exemplo.
 
 // IMPORTANTE: ARRAYS "SUPERGLOBAIS" => são definidas somente pela linguagem PHP.

@@ -1,10 +1,10 @@
 <?php
 
 // Variable Scope
-// O escopo de uma variável é o contexto onde foi definida. A maioria das em PHP
+// O escopo de uma variável é o contexto onde foi definida. A maioria das variáveis em PHP
 // tem somente escopo local.
 
-// Escopo local inclui os arquivos incluidos e requeridos
+// Escopo local inclui os arquivos incluídos e requeridos
 $a = 1;
 $c = 3;
 include 'b.inc';

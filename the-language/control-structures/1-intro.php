@@ -59,7 +59,7 @@ if ($a == $b) {
 }
 
 // IMPORTANTE: o uso de `:` para definir condições de if / elseif
-// NÃO ADMITE SEPARAÇÃO DO TERMO `èlseif`
+// NÃO ADMITE SEPARAÇÃO DO TERMO `elseif`
 // Sintaxe errada
 /*
 if ($a > $b):
