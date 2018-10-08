@@ -54,6 +54,6 @@ function add(int $a, int $b) {
 
 // echo add("20f", 2) . "\n"; // será lançada uma exceção devido a incompatibilidade de tipos
 
-// Tipagem Fraca
+// Tipagem Fraca (é o comportamento padrão pois `declare(strict_types=1)` está desabilitado)
 var_dump(add(1.5, 2.7)) . "\n"; // int(3) => tipo sofreu coerção de tipo para retornar valor do tipo integer
 var_dump(add(1, 2)) . "\n";     // int(3)
