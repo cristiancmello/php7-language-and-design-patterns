@@ -42,8 +42,8 @@ class ConcreteClassA extends AbstractClass
 }
 
 $classA = new ConcreteClassA();
-$classA->print();
-echo $classA->valueWithPrefix('FOO_') . "\n";
+$classA->print();                               // ConcreteClassA
+echo $classA->valueWithPrefix('FOO_') . "\n";   // FOO_ConcreteClassA
 
 // Exemplo 2: Classe abstrata com classe de implementação com método com mais argumentos que a assinatura original
 abstract class AbstractClassB
