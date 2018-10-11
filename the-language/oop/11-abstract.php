@@ -54,7 +54,9 @@ abstract class AbstractClassB
 class ConcreteClassB extends AbstractClassB
 {
     // A definição tem somente 1 argumento. No entanto, é possível criar mais argumentos opcionais que não existem
-    // na assinatura abstrata
+    // na assinatura abstrata.
+    // IMPORTANTE => ARGUMENTOS EXTRAS DEVEM SER OPCIONAIS E NÃO OBIGRATÓRIOS, POIS ENTRAM EM DESACORDO
+    //               COM A ASSINATURA ORIGINAL
     public function prefixName($name, $separator = ".")
     {
         if ($name == "Pacman") {
