@@ -69,3 +69,47 @@ echo $obj->address . "\n";      // address: Street ....
 
 echo $obj->default . "\n";      // 1 (true)
 echo $obj->getHidden() . "\n";  // 1 (true)
+
+// Exemplo 3: Getter and setter mais simples
+class Person
+{
+    private $name;
+    private $address;
+    private $gender;
+
+    public function __get($name)
+    {
+        if (property_exists($this, $name)) {
+            switch ($name) {
+                case "name":
+                    $preffix = "Name: ";
+                    break;
+                case "address":
+                    $preffix = "Address: ";
+                    break;
+                default:
+                    return $this->$name;
+            }
+
+            return $preffix . $this->$name;
+        }
+    }
+
+    public function __set($name, $value)
+    {
+        if (property_exists($this, $name)) {
+            $this->$name = $value;
+        }
+
+        return $this;
+    }
+}
+
+$obj = new Person();
+$obj->name = 'John Doe';
+$obj->address = 'Street ...';
+$obj->gender = 'Male';
+
+echo "$obj->name\n";        // Name: John Doe
+echo "$obj->address\n";     // Address: Street ...
+echo "$obj->gender\n";      // Male
