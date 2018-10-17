@@ -1,0 +1,22 @@
+{
+  "name": "cristiancmello/design-patterns",
+  "description": "DesignPatterns examples",
+  "authors": [
+    {
+      "name": "Cristian Mello",
+      "email": "cristianc.mello@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.2.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7"
+  },
+  "autoload": {
+    "psr-4": {
+      "DesignPatterns\\": "src/"
+    }
+  }
+}
