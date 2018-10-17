@@ -1,0 +1,19 @@
+{
+  "name": "cristiancmello/hello-world",
+  "description": "My first Composer project",
+  "authors": [
+    {
+      "name": "Cristian Mello",
+      "email": "cristianc.mello@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.2.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "HelloWorld": "src/"
+    }
+  }
+}
