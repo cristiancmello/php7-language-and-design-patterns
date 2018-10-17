@@ -9,6 +9,10 @@
 // DICA: Generators são usados para programação assíncrona em PHP. Existe uma framework que auxilia
 //       chamado AMP <https://github.com/amphp/amp>
 
+// DESVANTAGEM DO USO DE GENERATORS AO INVÉS DE ITERATORS: Generators só se movem para FRENTE e não
+// podem ser rebobinados. Isso também significa que o generator não pode ser iterado várias vezes
+// sendo preciso ser reconstruído chamando a função generator novamente.
+
 // Exemplo 1: Demonstração do que a palavra `yield` retorna, que é o coração dos generators
 function getLines()
 {
