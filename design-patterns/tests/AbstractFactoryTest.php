@@ -22,10 +22,10 @@ class AbstractFactoryTest extends TestCase
         $this->assertInstanceOf(JsonParser::class, $parser);
     }
 
-    public function testCanCreateCvsParser()
+    public function testCanCreateCsvParser()
     {
         $factory = new ParserFactory();
-        $parser = $factory->createCvsParser(CsvParser::OPTION_CONTAINS_HEADER);
+        $parser = $factory->createCsvParser(CsvParser::OPTION_CONTAINS_HEADER);
 
         $this->assertInstanceOf(CsvParser::class, $parser);
     }
