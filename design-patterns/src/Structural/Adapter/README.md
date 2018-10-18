@@ -1,4 +1,4 @@
-# Adaptar/Wrapper example
+# Adapter/Wrapper example
 
 ## Diagram
 
