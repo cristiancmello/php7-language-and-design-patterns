@@ -1,4 +1,4 @@
-# Composite example
+# DataMapper example
 
 ## Diagram
 
