@@ -12,7 +12,7 @@ class PrototypeTest extends TestCase
         $fooPrototype = new FooBookPrototype();
         $barPrototype = new BarBookPrototype();
 
-        for ($i = 0; $i < 100000; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $book = clone $fooPrototype;
             $book->setTitle("Foo Book Number $i");
             $this->assertInstanceOf(FooBookPrototype::class, $book);
