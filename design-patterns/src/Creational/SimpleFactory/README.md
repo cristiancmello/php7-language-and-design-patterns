@@ -2,7 +2,7 @@
 
 ## Diagram
 
-![Image of Prototype](../../../images/simple-factory.png)
+![Image of Simple Factory](../../../images/simple-factory.png)
 
 ## Description
 
