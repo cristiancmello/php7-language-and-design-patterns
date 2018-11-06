@@ -11,6 +11,8 @@ use Damianopetrungaro\CleanArchitecture\UseCase\Request\CollectionRequest as Dom
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\CollectionResponse as DomainResponse;
 use Damianopetrungaro\CleanArchitecture\Common\Collection\ArrayCollection;
 use DesignPatterns\Extras\CleanArchitecture\Users\Domain\UseCase\GetUserUseCase;
+use DesignPatterns\Extras\CleanArchitecture\Users\Domain\UseCase\ListUserUseCase;
+use DesignPatterns\Extras\CleanArchitecture\Users\Application\Transformer\UserTransformer;
 
 class CleanArchitectureTest extends TestCase
 {
@@ -28,6 +30,11 @@ class CleanArchitectureTest extends TestCase
      * @var InMemoryUserRepository
      */
     private $userRepository;
+
+    /**
+     * @var UserTransformer
+     */
+    private $userTransformer;
 
     public function requestUserProvider()
     {
@@ -48,6 +55,7 @@ class CleanArchitectureTest extends TestCase
         $this->applicationErrorFactory = new ApplicationErrorFactory();
         $this->hydratorUserMapper = new HydratorUserMapper(ZendHydratorFactory::build());
         $this->userRepository = new InMemoryUserRepository($this->hydratorUserMapper);
+        $this->userTransformer = new UserTransformer();
     }
 
     /**
@@ -113,5 +121,61 @@ class CleanArchitectureTest extends TestCase
         $this->assertEquals($user['surname'], $response->getData()['user']['surname']);
         $this->assertNotNull($response->getData()['user']['password']);
         $this->assertEquals($user['email'], $response->getData()['user']['email']);
+    }
+
+    /**
+     * @dataProvider requestUserProvider
+     * @param $user
+     */
+    public function testCanListAllUsers($user)
+    {
+        $this->hydratorUserMapper = new HydratorUserMapper(ZendHydratorFactory::build());
+        $this->userRepository = new InMemoryUserRepository($this->hydratorUserMapper);
+
+        $addUserUseCase = new AddUserUseCase(
+            $this->applicationErrorFactory,
+            $this->userRepository,
+            $this->hydratorUserMapper
+        );
+
+        $listUsersUseCase = new ListUserUseCase(
+            $this->applicationErrorFactory,
+            $this->userRepository,
+            $this->hydratorUserMapper
+        );
+
+        $entries = [
+            'user1' => [
+                'name' => 'John',
+                'surname' => 'Doe',
+                'email' => 'john.doe@email.com',
+                'password' => '123456'
+            ],
+            'user2' => [
+                'name' => 'Mary',
+                'surname' => 'Falls',
+                'email' => 'mary.falls@email.com',
+                'password' => '654321'
+            ]
+        ];
+
+        foreach ($entries as $entry) {
+            $request = new DomainRequest(new ArrayCollection($entry));
+            $data = new ArrayCollection(); $errors = new ArrayCollection();
+            $response = new DomainResponse($data, $errors);
+
+            $addUserUseCase($request, $response);
+        }
+
+        $request = new DomainRequest(new ArrayCollection());
+        $data = new ArrayCollection(); $errors = new ArrayCollection();
+        $response = new DomainResponse($data, $errors);
+
+        $listUsersUseCase($request, $response);
+
+        $users = $this->userTransformer->mapMultiple($response->getData()['users']);
+
+        $this->assertCount(2, $this->userRepository->all());
+        $this->assertContains('Mary', $users[1]);
     }
 }

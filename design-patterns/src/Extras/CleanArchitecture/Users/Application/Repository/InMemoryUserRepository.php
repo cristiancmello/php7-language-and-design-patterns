@@ -39,12 +39,17 @@ final class InMemoryUserRepository implements UserRepositoryInterface
      * Retorna uma coleção de todos os usuários salvos para persistência.
      *
      * @return UsersArrayCollection
-     *
      * @throws UserPersistenceException
      */
     public function all(): UsersArrayCollection
     {
-        return $this->mapper->toMultipleObject(UserEntity::class, $this->data);
+        try {
+            $users = $this->mapper->toMultipleObject(UserEntity::class, $this->data);
+        } catch (\Exception $e) {
+            throw new UserPersistenceException('impossible_get_users', $e->getCode(), $e);
+        }
+
+        return $users;
     }
 
     /**
