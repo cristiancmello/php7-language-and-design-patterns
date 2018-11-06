@@ -13,6 +13,7 @@ use Damianopetrungaro\CleanArchitecture\Common\Collection\ArrayCollection;
 use DesignPatterns\Extras\CleanArchitecture\Users\Domain\UseCase\GetUserUseCase;
 use DesignPatterns\Extras\CleanArchitecture\Users\Domain\UseCase\ListUserUseCase;
 use DesignPatterns\Extras\CleanArchitecture\Users\Application\Transformer\UserTransformer;
+use DesignPatterns\Extras\CleanArchitecture\Users\Domain\UseCase\DeleteUserUseCase;
 
 class CleanArchitectureTest extends TestCase
 {
@@ -126,6 +127,7 @@ class CleanArchitectureTest extends TestCase
     /**
      * @dataProvider requestUserProvider
      * @param $user
+     * @throws \DesignPatterns\Extras\CleanArchitecture\Users\Domain\Repository\Exception\UserPersistenceException
      */
     public function testCanListAllUsers($user)
     {
@@ -177,5 +179,33 @@ class CleanArchitectureTest extends TestCase
 
         $this->assertCount(2, $this->userRepository->all());
         $this->assertContains('Mary', $users[1]);
+    }
+
+    /**
+     * @dataProvider requestUserProvider
+     */
+    public function testCanDeleteUser($user)
+    {
+        $response = $this->testCanCreateUser($user);
+
+        $this->assertCount(1, $this->userRepository->all());
+
+        $deleteUserByIdUseCase = new DeleteUserUseCase(
+            $this->applicationErrorFactory,
+            $this->userRepository,
+            $this->hydratorUserMapper
+        );
+
+        $entries = [
+            'id' => $response->getData()['user']['id']
+        ];
+
+        $request = new DomainRequest(new ArrayCollection($entries));
+        $data = new ArrayCollection(); $errors = new ArrayCollection();
+        $response = new DomainResponse($data, $errors);
+
+        $deleteUserByIdUseCase($request, $response);
+
+        $this->assertCount(0, $this->userRepository->all());
     }
 }

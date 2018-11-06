@@ -117,7 +117,17 @@ final class InMemoryUserRepository implements UserRepositoryInterface
      */
     public function findByUserId(UserId $userId): bool
     {
-        // TODO: Implement findByUserId() method.
+        try {
+            $id = $this->searchByField('id', $userId->getValue());
+        } catch (\Exception $e) {
+            throw new UserPersistenceException('impossible_get_user', $e->getCode(), $e);
+        }
+
+        if ($id == -1) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -131,7 +141,14 @@ final class InMemoryUserRepository implements UserRepositoryInterface
      */
     public function deleteByUserId(UserId $userId): void
     {
-        // TODO: Implement deleteByUserId() method.
+        try {
+            $id = $this->searchByField('id',$userId->getValue());
+
+            unset($this->data[$id]);
+            $this->data = array_values($this->data);
+        } catch (\Exception $e) {
+            throw new UserPersistenceException('impossible_delete_user', $e->getCode(), $e);
+        }
     }
 
     /**
