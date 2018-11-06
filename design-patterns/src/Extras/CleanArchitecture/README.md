@@ -33,6 +33,11 @@
 * *Repository* (**Repository** pattern):
   * **UserRepositoryInterface**: A contract to **UserRepository** implementation.
 
+#### Application
+
+* *Mapper*:
+  * **ZendHydratorFactory**: implements a **Hydrator** factory to convert **array** to **User** and viceversa;
+
 ## External Dependencies
 
 * **Clean Architecture package** : `compose require damianopetrungaro/clean-architecture`;

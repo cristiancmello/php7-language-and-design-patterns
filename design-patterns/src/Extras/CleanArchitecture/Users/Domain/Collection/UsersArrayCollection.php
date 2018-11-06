@@ -26,6 +26,7 @@ final class UsersArrayCollection extends ArrayCollection
 
         parent::__construct($users);
     }
+
     /**
      * Override para validar instância de UserEntity.
      * {@inheritDoc}
@@ -40,6 +41,7 @@ final class UsersArrayCollection extends ArrayCollection
                 throw new \InvalidArgumentException(get_class($user) . " must be an instance of " . get_class($this) . ".");
             }
         }
+
         return parent::mergeWith($users);
     }
 }

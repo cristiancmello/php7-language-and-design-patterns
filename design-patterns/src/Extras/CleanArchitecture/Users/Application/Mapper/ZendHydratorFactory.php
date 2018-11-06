@@ -24,12 +24,13 @@ class ZendHydratorFactory
         ]));
 
         $userIdStrategy = new UserIdStrategy();
-        $reflectionHydrator->addStrategy('userId', $userIdStrategy);
-        $reflectionHydrator->addStrategy('id', $userIdStrategy);
-        $reflectionHydrator->addStrategy('name', new NameStrategy());
-        $reflectionHydrator->addStrategy('surname', new SurnameStrategy());
-        $reflectionHydrator->addStrategy('email', new EmailStrategy());
-        $reflectionHydrator->addStrategy('password', new PasswordStrategy());
+        $reflectionHydrator
+            ->addStrategy('userId', $userIdStrategy)
+            ->addStrategy('id', $userIdStrategy)
+            ->addStrategy('name', new NameStrategy())
+            ->addStrategy('surname', new SurnameStrategy())
+            ->addStrategy('email', new EmailStrategy())
+            ->addStrategy('password', new PasswordStrategy());
 
         return $reflectionHydrator;
     }
