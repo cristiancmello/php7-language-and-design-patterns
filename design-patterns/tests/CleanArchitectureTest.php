@@ -14,6 +14,21 @@ use DesignPatterns\Extras\CleanArchitecture\Users\Domain\UseCase\GetUserUseCase;
 
 class CleanArchitectureTest extends TestCase
 {
+    /**
+     * @var ApplicationErrorFactory
+     */
+    private $applicationErrorFactory;
+
+    /**
+     * @var HydratorUserMapper
+     */
+    private $hydratorUserMapper;
+
+    /**
+     * @var InMemoryUserRepository
+     */
+    private $userRepository;
+
     public function requestUserProvider()
     {
         return [
@@ -28,17 +43,27 @@ class CleanArchitectureTest extends TestCase
         ];
     }
 
+    protected function setUp()
+    {
+        $this->applicationErrorFactory = new ApplicationErrorFactory();
+        $this->hydratorUserMapper = new HydratorUserMapper(ZendHydratorFactory::build());
+        $this->userRepository = new InMemoryUserRepository($this->hydratorUserMapper);
+    }
+
     /**
+     * Teste do Caso de Uso de Cadastro de Usuário.
+     *
      * @dataProvider requestUserProvider
      * @param $user
+     * @return DomainResponse
      */
     public function testCanCreateUser($user)
     {
-        $applicationErrorFactory = new ApplicationErrorFactory();
-        $hydratorUserMapper = new HydratorUserMapper(ZendHydratorFactory::build());
-        $userRepository = new InMemoryUserRepository($hydratorUserMapper);
-
-        $addUserUseCase = new AddUserUseCase($applicationErrorFactory, $userRepository, $hydratorUserMapper);
+        $addUserUseCase = new AddUserUseCase(
+            $this->applicationErrorFactory,
+            $this->userRepository,
+            $this->hydratorUserMapper
+        );
 
         $entries = $user;
 
@@ -53,30 +78,25 @@ class CleanArchitectureTest extends TestCase
         $this->assertEquals('Doe', $response->getData()['user']['surname']);
         $this->assertEquals('john.doe@email.com', $response->getData()['user']['email']);
         $this->assertRegExp('/\w+\-\w+\-\w+\-\w+\-\w+/', $response->getData()['user']['id']);
+
+        return $response;
     }
 
     /**
      * @dataProvider requestUserProvider
      * @param $user
+     *
+     * @depends testCanCreateUser
      */
     public function testCanGetUserById($user)
     {
-        $applicationErrorFactory = new ApplicationErrorFactory();
-        $hydratorUserMapper = new HydratorUserMapper(ZendHydratorFactory::build());
-        $userRepository = new InMemoryUserRepository($hydratorUserMapper);
+        $getUserByIdUseCase = new GetUserUseCase(
+            $this->applicationErrorFactory,
+            $this->userRepository,
+            $this->hydratorUserMapper
+        );
 
-        $addUserUseCase = new AddUserUseCase($applicationErrorFactory, $userRepository, $hydratorUserMapper);
-
-        $entries = $user;
-
-        $request = new DomainRequest(new ArrayCollection($entries));
-
-        $data = new ArrayCollection(); $errors = new ArrayCollection();
-        $response = new DomainResponse($data, $errors);
-
-        $addUserUseCase($request, $response);
-
-        $getUserByIdUseCase = new GetUserUseCase($applicationErrorFactory, $userRepository, $hydratorUserMapper);
+        $response = $this->testCanCreateUser($user);
 
         $entries = [
             'id' => $response->getData()['user']['id']
