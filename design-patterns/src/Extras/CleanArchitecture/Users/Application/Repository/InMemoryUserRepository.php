@@ -15,7 +15,7 @@ use Ramsey\Uuid\Uuid;
 final class InMemoryUserRepository implements UserRepositoryInterface
 {
     /**
-     * @var UsersArrayCollection
+     * @var array
      */
     private $data;
 
@@ -31,6 +31,7 @@ final class InMemoryUserRepository implements UserRepositoryInterface
      */
     public function __construct(UserMapper $mapper)
     {
+        $this->data = [];
         $this->mapper = $mapper;
     }
 
@@ -43,7 +44,7 @@ final class InMemoryUserRepository implements UserRepositoryInterface
      */
     public function all(): UsersArrayCollection
     {
-        // TODO: Implement all() method.
+        return $this->mapper->toMultipleObject(UserEntity::class, $this->data);
     }
 
     /**
@@ -58,7 +59,17 @@ final class InMemoryUserRepository implements UserRepositoryInterface
      */
     public function getByUserId(UserId $userId): UserEntity
     {
-        // TODO: Implement getByUserId() method.
+        try {
+            $id = $this->searchByField('id', $userId->getValue());
+        } catch (\Exception $e) {
+            throw new UserPersistenceException('impossible_get_user', $e->getCode(), $e);
+        }
+
+        if ($id == -1) {
+            throw new UserNotFoundException();
+        }
+
+        return $this->mapper->toObject(UserEntity::class, $this->data[$id]);
     }
 
     /**
@@ -130,5 +141,30 @@ final class InMemoryUserRepository implements UserRepositoryInterface
     public function update(UserEntity $user): void
     {
         // TODO: Implement update() method.
+    }
+
+    /**
+     * @param $field
+     * @param $value
+     * @return int
+     * @throws \Exception
+     */
+    private function searchByField($field, $value)
+    {
+        $count = 0;
+
+        if (array_key_exists($field, $this->data)) {
+            throw new \Exception("Field $field not found.");
+        }
+
+        foreach ($this->data as $user) {
+            if ($user[$field] === $value) {
+                return $count;
+            }
+
+            $count++;
+        }
+
+        return -1;
     }
 }

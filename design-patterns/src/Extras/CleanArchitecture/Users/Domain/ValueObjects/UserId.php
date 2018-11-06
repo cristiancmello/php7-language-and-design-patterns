@@ -25,10 +25,10 @@ final class UserId
     /**
      * Retornar um novo Uuid a partir de uma string.
      *
-     * @param UuidInterface $userId
+     * @param string $userId
      * @return UserId
      */
-    public static function createFromString(UuidInterface $userId): UserId
+    public static function createFromString(string $userId): UserId
     {
         return new self(Uuid::fromString($userId));
     }
