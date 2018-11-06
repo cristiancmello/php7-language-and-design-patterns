@@ -14,6 +14,7 @@ use DesignPatterns\Extras\CleanArchitecture\Users\Domain\UseCase\GetUserUseCase;
 use DesignPatterns\Extras\CleanArchitecture\Users\Domain\UseCase\ListUserUseCase;
 use DesignPatterns\Extras\CleanArchitecture\Users\Application\Transformer\UserTransformer;
 use DesignPatterns\Extras\CleanArchitecture\Users\Domain\UseCase\DeleteUserUseCase;
+use DesignPatterns\Extras\CleanArchitecture\Users\Domain\UseCase\UpdateUserUseCase;
 
 class CleanArchitectureTest extends TestCase
 {
@@ -183,6 +184,8 @@ class CleanArchitectureTest extends TestCase
 
     /**
      * @dataProvider requestUserProvider
+     * @param $user
+     * @throws \DesignPatterns\Extras\CleanArchitecture\Users\Domain\Repository\Exception\UserPersistenceException
      */
     public function testCanDeleteUser($user)
     {
@@ -207,5 +210,43 @@ class CleanArchitectureTest extends TestCase
         $deleteUserByIdUseCase($request, $response);
 
         $this->assertCount(0, $this->userRepository->all());
+    }
+
+    /**
+     * @dataProvider requestUserProvider
+     * @param $user
+     */
+    public function testCanUpdateUser($user)
+    {
+        $response = $this->testCanCreateUser($user);
+
+        $oldPasswordHash = $response->getData()['user']['password'];
+
+        $updateUserByIdUseCase = new UpdateUserUseCase(
+            $this->applicationErrorFactory,
+            $this->userRepository,
+            $this->hydratorUserMapper
+        );
+
+        $entries = [
+            'id' => $response->getData()['user']['id'],
+            'name' => 'Alan',
+            'surname' => 'Poe',
+            'email' => 'alan.poe@email.com',
+            'old_password' => $user['password'],
+            'new_password' => '1234567'
+        ];
+
+        $request = new DomainRequest(new ArrayCollection($entries));
+        $data = new ArrayCollection(); $errors = new ArrayCollection();
+        $response = new DomainResponse($data, $errors);
+
+        $updateUserByIdUseCase($request, $response);
+
+        $this->assertEquals($entries['id'], $response->getData()['user']['id']);
+        $this->assertNotEquals($user['name'], $response->getData()['user']['name']);
+        $this->assertNotEquals($user['surname'], $response->getData()['user']['surname']);
+        $this->assertNotEquals($user['email'], $response->getData()['user']['email']);
+        $this->assertNotTrue(password_verify($entries['new_password'], $oldPasswordHash));
     }
 }

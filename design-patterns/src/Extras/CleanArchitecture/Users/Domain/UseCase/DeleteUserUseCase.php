@@ -8,7 +8,6 @@ use Damianopetrungaro\CleanArchitecture\UseCase\Validation\ValidableUseCase;
 use DesignPatterns\Extras\CleanArchitecture\Common\Error\ApplicationErrorFactory;
 use DesignPatterns\Extras\CleanArchitecture\Common\Error\ApplicationErrorType;
 use DesignPatterns\Extras\CleanArchitecture\Users\Domain\Mapper\UserMapper;
-use DesignPatterns\Extras\CleanArchitecture\Users\Domain\Repository\Exception\UserNotFoundException;
 use DesignPatterns\Extras\CleanArchitecture\Users\Domain\Repository\Exception\UserPersistenceException;
 use DesignPatterns\Extras\CleanArchitecture\Users\Domain\Repository\UserRepositoryInterface;
 use DesignPatterns\Extras\CleanArchitecture\Users\Domain\ValueObjects\UserId;

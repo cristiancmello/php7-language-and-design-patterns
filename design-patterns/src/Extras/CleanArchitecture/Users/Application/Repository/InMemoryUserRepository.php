@@ -162,7 +162,14 @@ final class InMemoryUserRepository implements UserRepositoryInterface
      */
     public function update(UserEntity $user): void
     {
-        // TODO: Implement update() method.
+        try {
+            $user = $this->mapper->toArray($user);
+            $id = $this->searchByField('id', $user['id']);
+
+            $this->data[$id] = $user;
+        } catch (\Exception $e) {
+            throw new UserPersistenceException('impossible_update_user', $e->getCode(), $e);
+        }
     }
 
     /**
