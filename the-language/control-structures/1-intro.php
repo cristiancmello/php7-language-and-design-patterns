@@ -88,7 +88,7 @@ Sempre true. <!-- output HTML -->
 <!-- MISTURA DE SINTAXES COM `:` e `{}` NÃO É SUPORTADA NO MESMO BLOCO DE CONTROLE -->
 
 <!-- IMPORTANTE: QUALQUER SAÍDA (INCLUSIVE ESPAÇOS EM BRANCO) ENTRE `switch`
-E O PRIMEIRO CASE IRÁ RESULTAR NUM ERRO DE SINTAXE. -->
+E O PRIMEIRO `case` fora de "<?php"  IRÁ RESULTAR NUM ERRO DE SINTAXE. -->
 <?php $foo = 1 ?>
 <?php switch($foo): ?>
 <?php case 1: ?> <!-- espaços à esquerda não são permitidos -->
